@@ -12,6 +12,7 @@ public class ShopList {
 	static File file = new File("shopList.txt");
 	static Scanner fileRead;
 	static String list[];
+	static int end;
 	
 	static void read() throws FileNotFoundException {
 		
@@ -29,7 +30,6 @@ public class ShopList {
 				list[count] = fileRead.nextLine();
 				count++;
 			}
-			System.out.println(Arrays.toString(list));
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class ShopList {
 		for(int i = 0; i < list.length; i ++) {
 			arr[i] = list[i];
 		}
-		System.out.println(Arrays.toString(arr));
+		
 		list = new String[arr.length + 1];
 		for(int i = 0; i < arr.length; i++) {
 			list[i] = arr[i];
@@ -64,7 +64,7 @@ public class ShopList {
 	
 	static void edit() throws IOException {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("number to Edit:");
+		System.out.println("Number to Edit:");
 		int itemToEdit = scan.nextInt();
 		System.out.println("Type the correct item:");
 		scan = new Scanner(System.in);
@@ -74,16 +74,54 @@ public class ShopList {
 		save();
 	}
 	
-	static void shopingList () throws IOException {
+	static void delete(String arr[]) throws IOException {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Number to delete");
+		int itemToDelete = scan.nextInt();
+		arr = new String[list.length - 1]; 
+		for(int i = itemToDelete - 1; i < list.length - 1; i++) {
+			arr[i] = list[i + 1]; 
+		}
+		String temp[] = list;
+		list = new String[arr.length];
+		list = arr;
+		for(int i = 0; i < itemToDelete - 1; i++) {
+			list[i] = temp[i];
+		}
+		save();
+		
+		
+	}
 	
+	static void shoppingList () throws IOException {
+		System.out.println("Choose action:");
+		System.out.println("a - add item");
+		System.out.println("e - edit");
+		System.out.println("s - show list");
+		System.out.println("d - delete item");
+		System.out.println("q - quit");
+		
+		Scanner scanner = new Scanner(System.in);
+		String action = scanner.nextLine();
+		
+		if(action.equals("a")) {
+			addItem(list);
+		}else if(action.equals("e")) {
+			edit();
+		}else if(action.equals("s")) {
+//			show();
+		}else if(action.equals("d")) {
+			delete(list);
+		}else if(action.equals("q")) {
+			end = 1;
+		}
 	}
 	
 	public static void main(String[] args) throws IOException {
-	read();
-//	addItem(list);
-	edit();
-	read();
-	
+		read();
+		
+		while(end != 1) {
+			shoppingList();
+		}
 	}
-
 }
